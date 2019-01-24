@@ -1,0 +1,20 @@
+class Solution {
+  public static int numberOfConnectedComponents(Graph g) {
+    // TODO
+    Collection<Vertex> unexplored = g.getAllVertices();
+    int con = 0;
+    while(unexplored.iterator().hasNext()){
+      con++;
+      Vertex v = unexplored.iterator().next();
+      GraphIterator it = new GraphIterator(g, v);
+      while(it.hasNext()){
+        Vertex temp = it.next();
+        if(unexplored.contains(temp)){
+          unexplored.remove(temp);
+        }
+      }
+    }
+    return con;
+  }
+}
+//
