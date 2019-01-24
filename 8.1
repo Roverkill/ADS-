@@ -1,0 +1,69 @@
+import java.util.*;
+
+/**
+ * Implements a Depth first traversal of the Graph, starting at contructor vertex v. It
+ * should return nodes at most once. If there is a choice between multiple next nodes,
+ * always pick the lowest id node.
+ */
+class GraphIterator implements Iterator<Vertex> {
+  private Graph g;
+  private Vertex v;
+  private Stack<Vertex> stack;
+  private Set<Vertex> colored;
+  private int graphSize;
+
+  public GraphIterator(Graph g, Vertex v) {
+    // TODO
+    this.g = g;
+    this.v = v;
+    stack = new Stack<Vertex>();
+    stack.push(this.v);
+    colored = new TreeSet<Vertex>();
+    colored.add(this.v);
+  }
+
+  @Override
+  public boolean hasNext() {
+    // TODO
+    if(this == null || this.stack == null || this.stack.isEmpty()){
+      return false;
+    }
+    return true;
+  }
+
+  @Override
+  public Vertex next() {
+    // TODO
+    if(this == null || this.stack == null || this.stack.isEmpty()){
+      return null;
+    }
+    Vertex v = this.stack.pop();
+    List<Vertex> l = g.getNeighbours(v);
+    Object[] temp = l.toArray();
+    int loc = 0;
+    for(int n = 0; n < temp.length; n++){
+      int x = ((Vertex)temp[n]).getId();
+      loc = n;
+      for(int i = n; i < temp.length; i++){
+        Vertex ver = (Vertex) temp[i];
+        if(x < ver.getId()){
+          x = ver.getId();
+          loc = i;
+        }
+      }
+      if(loc != n){
+        Vertex z = (Vertex) temp[n];
+        temp[n] = temp[loc];
+        temp[loc] = z;
+      }
+    }
+    for(int i = 0; i < temp.length; i++){
+      if(!colored.contains((Vertex) temp[i])){
+        stack.push((Vertex) temp[i]);
+        colored.add((Vertex) temp[i]);
+      }
+    }
+    return v;
+  }
+}
+//
